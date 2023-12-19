@@ -1,0 +1,12 @@
+version: '3'
+services:
+  express-gateway:
+    image: node:18
+    working_dir: /app
+  
+    volumes:
+      - ./config:/app
+      - ./config:/app/
+    ports:
+      - "9876:9876"
+    command: ["npm", "start"]

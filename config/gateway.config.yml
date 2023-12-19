@@ -1,0 +1,28 @@
+http:
+  port: 9875
+apiEndpoints:
+  api:
+    host: localhost
+    paths: '/*'
+serviceEndpoints:
+  nestApi:
+    # url: 'http://35.88.165.47:3000'
+    url: 'http://192.168.70.156:3000'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - api
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: nestApi
+              changeOrigin: true
