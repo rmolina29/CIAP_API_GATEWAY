@@ -6,12 +6,22 @@ apiEndpoints:
     paths: '/*'
 serviceEndpoints:
   nestApi:
-    # url: 'http://35.88.165.47:3000'
-    url: 'http://192.168.70.156:3000'
+      url: 'http://35.88.165.47:3000'
+    # url: 'http://192.168.70.156:3000'
+fallbackApi:
+    url: 'http://192.168.70.47:3000'
 policies:
   - basic-auth
   - cors
-  - expression
+  - expression:
+      action:
+        condition: |
+          request.status === 0 || (response && response.status >= 500)
+        policies:
+          - proxy:
+              - action:
+                  serviceEndpoint: fallbackApi
+                  changeOrigin: true
   - key-auth
   - log
   - oauth2
@@ -22,6 +32,7 @@ pipelines:
     apiEndpoints:
       - api
     policies:
+      - condition
       - proxy:
           - action:
               serviceEndpoint: nestApi
