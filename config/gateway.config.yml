@@ -1,29 +1,76 @@
 http:
   port: 9875
+
 apiEndpoints:
-  api:
+  nts:
     host: localhost
-    paths: '/*'
+    paths: "/nts/*"
+  fts:
+    host: localhost
+    paths: "/fts/*"
+
 serviceEndpoints:
-  nestApi:
-    # url: 'http://35.88.165.47:3000'
-    # url: 'http://192.168.70.156:3000'
-    url: 'http://localhost:3000'
+  nts:
+    urls:
+      - "http://localhost:3000"
+  fts:
+    urls:
+      - "http://localhost:8000"
+
 policies:
-  - basic-auth
-  - cors
-  - expression
-  - key-auth
-  - log
-  - oauth2
   - proxy
-  - rate-limit
+  - cors
+  - log
 pipelines:
-  default:
+  fts:
     apiEndpoints:
-      - api
+      - fts
     policies:
       - proxy:
           - action:
-              serviceEndpoint: nestApi
+              serviceEndpoint: fts
               changeOrigin: true
+      - cors:
+          - action:
+                origin: '*'
+                methods: 'HEAD,PUT,PATCH,POST,DELETE'
+                allowedHeaders: 'X-TEST'
+                credentials: false
+      - log: # policy name
+          - action:    # array of condition/actions objects
+              message: ${req.method} ${req.originalUrl} # parameter for log action
+  nts:
+    apiEndpoints:
+      - nts
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: nts
+              changeOrigin: true
+      - cors:
+          - action:
+                origin: '*'
+                methods: 'HEAD,PUT,PATCH,POST,DELETE'
+                allowedHeaders: 'X-TEST'
+                credentials: false
+      - log: # policy name
+          - action:    # array of condition/actions objects
+              message: ${req.method} ${req.originalUrl} # parameter for log action
+
+  # default:
+  #   apiEndpoints:
+  #     - api
+  #   policies:
+  #   - proxy:
+  #       - action:
+  #           condition: "request.url.path.startsWith('/parametros/gerencia')"
+  #           serviceEndpoint: fastApi
+  #           changeOrigin: true
+  #       - action:
+  #           serviceEndpoint: nestApi
+  #           changeOrigin: true
+
+
+
+    # url: 'http://35.88.165.47:3000'
+    # url: 'http://192.168.70.156:3000'
