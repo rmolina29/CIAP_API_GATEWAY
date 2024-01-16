@@ -12,11 +12,11 @@ apiEndpoints:
 serviceEndpoints:
   nts:
     urls:
-      # - "http://localhost:3000"
+      - "http://localhost:3000"
       - "http://35.88.165.47:3000"
   fts:
     urls:
-      # - "http://localhost:8000"
+      - "http://localhost:8000"
       - "http://35.88.165.47:8000"
 policies:
   - proxy
@@ -31,12 +31,6 @@ pipelines:
           - action:
               serviceEndpoint: fts
               changeOrigin: true
-      - cors:
-          - action:
-                origin: '*'
-                methods: 'HEAD,PUT,PATCH,POST,DELETE'
-                allowedHeaders: 'X-TEST'
-                credentials: false
       - log: # policy name
           - action:    # array of condition/actions objects
               message: ${req.method} ${req.originalUrl} # parameter for log action
@@ -48,12 +42,6 @@ pipelines:
           - action:
               serviceEndpoint: nts
               changeOrigin: true
-      - cors:
-          - action:
-                origin: '*'
-                methods: 'HEAD,PUT,PATCH,POST,DELETE'
-                allowedHeaders: 'X-TEST'
-                credentials: false
       - log: # policy name
           - action:    # array of condition/actions objects
               message: ${req.method} ${req.originalUrl} # parameter for log action
