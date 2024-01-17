@@ -13,15 +13,12 @@ serviceEndpoints:
   nts:
     urls:
       - "http://localhost:3000"
-      - "http://35.88.165.47:3000"
   fts:
     urls:
       - "http://localhost:8000"
-      - "http://35.88.165.47:8000"
+
 policies:
   - proxy
-  - cors
-  - log
 pipelines:
   fts:
     apiEndpoints:
@@ -31,9 +28,6 @@ pipelines:
           - action:
               serviceEndpoint: fts
               changeOrigin: true
-      - log: # policy name
-          - action:    # array of condition/actions objects
-              message: ${req.method} ${req.originalUrl} # parameter for log action
   nts:
     apiEndpoints:
       - nts
@@ -42,9 +36,6 @@ pipelines:
           - action:
               serviceEndpoint: nts
               changeOrigin: true
-      - log: # policy name
-          - action:    # array of condition/actions objects
-              message: ${req.method} ${req.originalUrl} # parameter for log action
 
   # default:
   #   apiEndpoints:
