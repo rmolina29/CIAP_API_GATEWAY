@@ -12,10 +12,10 @@ apiEndpoints:
 serviceEndpoints:
   nts:
     urls:
-      - "http://localhost:3000"
+      - "http://35.88.165.47:3000"
   fts:
     urls:
-      - "http://localhost:8000"
+      - "http://35.88.165.47:8000"
 
 policies:
   - proxy
